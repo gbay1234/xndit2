@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Xendit Manual Card Charge</title>
+  <script src="https://js.xendit.co/v1/xendit.min.js"></script>
+</head>
+<body>
+  <h2>Charge Booking.com Card</h2>
+  <form id="card-form">
+    <label>Card Number:</label><br>
+    <input type="text" id="card_number" placeholder="4111 1111 1111 1111" required><br><br>
+
+    <label>Expiry Month:</label><br>
+    <input type="text" id="expiry_month" placeholder="MM" required><br><br>
+
+    <label>Expiry Year:</label><br>
+    <input type="text" id="expiry_year" placeholder="YYYY" required><br><br>
+
+    <label>CVV:</label><br>
+    <input type="text" id="cvn" placeholder="123" required><br><br>
+
+    <label>Amount (IDR):</label><br>
+    <input type="number" id="amount" placeholder="100000" required><br><br>
+
+    <button type="submit">Charge Card</button>
+  </form>
+
+  <div id="result"></div>
+
+  <script>
+    const publishableKey = 'xnd_public_production_z5XooZH1_MhacolSwdToZdY9zgez4emzzbEEpViGtLnouqf22GmNfMGtVvbY7'; // replace this with your real key
+    Xendit.setPublishableKey(publishableKey);
+
+    const form = document.getElementById('card-form');
+    const resultDiv = document.getElementById('result');
+
+    form.addEventListener('submit', function (e) {
+      e.preventDefault();
+
+      Xendit.card.createToken({
+        amount: parseInt(document.getElementById('amount').value),
+        card_number: document.getElementById('card_number').value,
+        card_exp_month: document.getElementById('expiry_month').value,
+        card_exp_year: document.getElementById('expiry_year').value,
+        card_cvn: document.getElementById('cvn').value
+      }, function (err, creditCardToken) {
+        if (err) {
+          resultDiv.innerHTML = '<p style="color:red">Tokenization failed: ' + err.message + '</p>';
+        } else {
+          resultDiv.innerHTML = '<p style="color:green">Token created successfully:<br>' + JSON.stringify(creditCardToken, null, 2) + '</p>';
+          // You now need to POST creditCardToken.id to your backend to call Xendit's charge API
+        }
+      });
+    });
+  </script>
+</body>
+</html>
