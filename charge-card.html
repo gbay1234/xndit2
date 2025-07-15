@@ -25,10 +25,11 @@
     <button type="submit">Charge Card</button>
   </form>
 
-  <div id="result"></div>
+  <div id="result" style="margin-top: 20px;"></div>
 
   <script>
-    const publishableKey = 'xnd_public_production_z5XooZH1_MhacolSwdToZdY9zgez4emzzbEEpViGtLnouqf22GmNfMGtVvbY7'; // replace this with your real key
+    // ✅ Replace with your real live public key
+    const publishableKey = 'xnd_public_production_z5XooZH1_MhacolSwdToZdY9zgez4emzzbEEpViGtLnouqf22GmNfMGtVvbY7';
     Xendit.setPublishableKey(publishableKey);
 
     const form = document.getElementById('card-form');
@@ -45,10 +46,30 @@
         card_cvn: document.getElementById('cvn').value
       }, function (err, creditCardToken) {
         if (err) {
-          resultDiv.innerHTML = '<p style="color:red">Tokenization failed: ' + err.message + '</p>';
+          resultDiv.innerHTML = '<p style="color:red">❌ Tokenization failed: ' + err.message + '</p>';
         } else {
-          resultDiv.innerHTML = '<p style="color:green">Token created successfully:<br>' + JSON.stringify(creditCardToken, null, 2) + '</p>';
-          // You now need to POST creditCardToken.id to your backend to call Xendit's charge API
+          resultDiv.innerHTML = '<p style="color:green">✅ Token created, charging now...</p>';
+
+          // ✅ Send token to backend to charge
+          fetch('/api/charge', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              token_id: creditCardToken.id,
+              amount: parseInt(document.getElementById('amount').value),
+            }),
+          })
+          .then(res => res.json())
+          .then(data => {
+            if (data.success) {
+              resultDiv.innerHTML = '<p style="color:green">✅ Charge successful!<br>' + JSON.stringify(data.charge, null, 2) + '</p>';
+            } else {
+              resultDiv.innerHTML = '<p style="color:red">❌ Charge failed:<br>' + JSON.stringify(data.error, null, 2) + '</p>';
+            }
+          })
+          .catch(err => {
+            resultDiv.innerHTML = '<p style="color:red">❌ Network error: ' + err.message + '</p>';
+          });
         }
       });
     });
