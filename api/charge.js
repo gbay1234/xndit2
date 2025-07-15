@@ -13,7 +13,7 @@ export default async function handler(req, res) {
     token_id,
     external_id: 'booking-' + Date.now(),
     amount: parseInt(amount, 10),
-    capture: true, // set false if you want to pre-authorize only
+    capture: true, // set to false if you want to pre-authorize instead of immediately charging
   };
 
   try {
