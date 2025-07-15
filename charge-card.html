@@ -7,6 +7,12 @@
 <body>
   <h2>Charge Booking.com Card</h2>
   <form id="card-form">
+    <label>First Name:</label><br>
+    <input type="text" id="first_name" placeholder="John" required><br><br>
+
+    <label>Last Name:</label><br>
+    <input type="text" id="last_name" placeholder="Doe" required><br><br>
+
     <label>Card Number:</label><br>
     <input type="text" id="card_number" placeholder="4111 1111 1111 1111" required><br><br>
 
@@ -28,7 +34,7 @@
   <div id="result" style="margin-top: 20px;"></div>
 
   <script>
-    // ✅ Replace with your real live public key
+    // ✅ Replace this with your real LIVE public key
     const publishableKey = 'xnd_public_production_z5XooZH1_MhacolSwdToZdY9zgez4emzzbEEpViGtLnouqf22GmNfMGtVvbY7';
     Xendit.setPublishableKey(publishableKey);
 
@@ -43,7 +49,9 @@
         card_number: document.getElementById('card_number').value,
         card_exp_month: document.getElementById('expiry_month').value,
         card_exp_year: document.getElementById('expiry_year').value,
-        card_cvn: document.getElementById('cvn').value
+        card_cvn: document.getElementById('cvn').value,
+        card_holder_first_name: document.getElementById('first_name').value,
+        card_holder_last_name: document.getElementById('last_name').value,
       }, function (err, creditCardToken) {
         if (err) {
           resultDiv.innerHTML = '<p style="color:red">❌ Tokenization failed: ' + err.message + '</p>';

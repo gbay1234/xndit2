@@ -3,8 +3,7 @@ export default async function handler(req, res) {
   if (req.method !== 'POST') return res.status(405).end();
 
   const { token_id, amount } = req.body;
-
-  const secretKey = process.env.XENDIT_SECRET_KEY; // ✅ Environment variable now
+  const secretKey = process.env.XENDIT_SECRET_KEY;
 
   if (!secretKey) {
     return res.status(500).json({ success: false, error: 'Missing XENDIT_SECRET_KEY env var' });
@@ -14,7 +13,7 @@ export default async function handler(req, res) {
     token_id,
     external_id: 'booking-' + Date.now(),
     amount: parseInt(amount, 10),
-    capture: true,
+    capture: true, // set false if you want to pre-authorize only
   };
 
   try {
@@ -30,7 +29,7 @@ export default async function handler(req, res) {
     const data = await response.json();
 
     if (!response.ok) {
-      return res.status(500).json({ success: false, error: data });
+      return res.status(response.status).json({ success: false, error: data });
     }
 
     res.status(200).json({ success: true, charge: data });
