@@ -8,19 +8,19 @@
   <h2>Charge Booking.com Card</h2>
   <form id="card-form">
     <label>First Name:</label><br>
-    <input type="text" id="first_name" placeholder="John" required><br><br>
+    <input type="text" id="first_name" value="B" required><br><br>
 
     <label>Last Name:</label><br>
-    <input type="text" id="last_name" placeholder="Doe" required><br><br>
+    <input type="text" id="last_name" value="B" required><br><br>
 
     <label>Email:</label><br>
-    <input type="email" id="email" placeholder="guest@example.com" required><br><br>
+    <input type="email" id="email" value="j.c.silverwood@gmail.com" required><br><br>
 
     <label>Phone Number:</label><br>
-    <input type="tel" id="phone" placeholder="+6281234567890"><br><br>
+    <input type="tel" id="phone" value="+1234567832"><br><br>
 
     <label>Card Number:</label><br>
-    <input type="text" id="card_number" placeholder="4111 1111 1111 1111" required><br><br>
+    <input type="text" id="card_number" placeholder="4111111111111111" required><br><br>
 
     <label>Expiry Month:</label><br>
     <input type="text" id="expiry_month" placeholder="MM" required><br><br>
@@ -40,11 +40,17 @@
   <div id="result" style="margin-top: 20px;"></div>
 
   <script>
-    const publishableKey = 'xnd_public_production_z5XooZH1_MhacolSwdToZdY9zgez4emzzbEEpViGtLnouqf22GmNfMGtVvbY7'; // Replace with your real public key
+    const publishableKey = 'xnd_public_production_z5XooZH1_MhacolSwdToZdY9zgez4emzzbEEpViGtLnouqf22GmNfMGtVvbY7';
     Xendit.setPublishableKey(publishableKey);
 
     const form = document.getElementById('card-form');
     const resultDiv = document.getElementById('result');
+    const cardInput = document.getElementById('card_number');
+
+    // Remove spaces from card number as user types or pastes
+    cardInput.addEventListener('input', () => {
+      cardInput.value = cardInput.value.replace(/\s+/g, '');
+    });
 
     form.addEventListener('submit', function (e) {
       e.preventDefault();
